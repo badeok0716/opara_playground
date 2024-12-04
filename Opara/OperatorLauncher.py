@@ -179,7 +179,8 @@ def recompile(model_class_name, graph_module, inputs):
     # model_class_name = graph_module.__class__.__name__
     for i in inputs:
         model_class_name += "_" + str(i.shape)
-    path += "/profile_result/" + model_class_name + ".pt.trace.json"
+    cur_slurm_node = os.environ['SLURM_NODELIST']
+    path += "/profile_result/" + model_class_name + "_" + cur_slurm_node + ".pt.trace.json"
     if os.path.exists(path) is False:
         ModelProfiler.profile(graph_module, inputs, path)
     node2kernels, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock = get_resource_from_json(path)

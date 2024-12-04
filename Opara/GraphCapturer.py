@@ -85,7 +85,6 @@ def capturer(inputs, model, copy_outputs: bool = False):
     with torch.no_grad():
         explanation, out_guards, graphs, ops_per_graph, break_reasons, explanation_verbose = dynamo.explain(model, *inputs)
     fx_module = graphs[0]
-    # print(fx_module.graph, file=output_file)
     fx_module.cuda()
     model_class_name = model.__class__.__name__
     OperatorLauncher.recompile(model_class_name, fx_module, inputs)
@@ -96,8 +95,6 @@ def capturer(inputs, model, copy_outputs: bool = False):
     first_stream = all_streams[0]
     first_event = all_events[0]
     interpreter = Scheduler(fx_module)
-
-    # with torch.autocast(device_type='cuda', dtype=torch.float16):
 
     with torch.no_grad():
         for i in range(3):

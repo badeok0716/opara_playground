@@ -31,7 +31,7 @@ def get_col_row_names(path2dir):
 
 def get_table(path2dir):
     # cols, rows = get_col_row_names(path2dir)
-    cols, rows = ['torch', 'sequence', 'opara'], ['deepfm', 'googlenet', 'nasnet']
+    cols, rows = ['torch', 'torch_compile', 'sequence', 'opara'], ['deepfm', 'googlenet', 'nasnet']
     table = [[''] + cols]
     for row in rows:
         row_content = [row]
@@ -46,7 +46,7 @@ def print_table(table):
         print(','.join(row))
 
 if __name__ == '__main__':
-    rootdir = '/home/deokjae/Opara/examples/results/'
+    rootdir = '/home/deokjae/Opara/examples/results_2.0.0/'
 
     for expkey in [f'{nodename}_{nbatch}_1000_5000' for nodename in ['david', 'donut', 'vanilla'] for nbatch in [4]]:
         table = get_table(rootdir + expkey)
