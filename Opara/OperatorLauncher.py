@@ -176,11 +176,11 @@ def get_topo(fx_nodes, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock):
 def recompile(model_class_name, graph_module, inputs):
     
     path = os.path.abspath(os.path.dirname(__file__))
-    # model_class_name = graph_module.__class__.__name__
     for i in inputs:
         model_class_name += "_" + str(i.shape)
     cur_slurm_node = os.environ['SLURM_NODELIST']
-    path += "/profile_result/" + model_class_name + "_" + cur_slurm_node + ".pt.trace.json"
+    os.makedirs(path + "/profile_result/2.0.0/", exist_ok=True)
+    path += "/profile_result/2.0.0/" + model_class_name + "_" + cur_slurm_node + ".pt.trace.json"
     if os.path.exists(path) is False:
         ModelProfiler.profile(graph_module, inputs, path)
     node2kernels, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock = get_resource_from_json(path)
