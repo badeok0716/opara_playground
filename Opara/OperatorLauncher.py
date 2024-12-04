@@ -4,10 +4,6 @@ from Opara import ModelProfiler
 
 from collections import deque
 import os
-path = os.path.abspath(os.path.dirname(__file__))
-output_file_path = path + '/profile_result/output.txt'
-output_file = open(output_file_path, "w")
-
 
 def launch(nodes, result, in_degree, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock):
     def is_mem_access_intensive(node):
@@ -131,8 +127,6 @@ def get_resource_from_json(path):
                 node2kernels[i].append(kernel_events[j])
                 kernel_num += 1
 
-    # print("kernel_num", kernel_num)
-
     max_block_nums = []
     sum_time = 0
     for i, kernel_events in enumerate(node2kernels):
@@ -168,7 +162,6 @@ def get_topo(fx_nodes, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock):
             in_degree[node.name] += 1
     visited = set()
     result = []
-    # print("fx_nodes", nodes.keys(), file=output_file)
     result = launch(nodes, result, in_degree, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock)
 
     return result, nodes
@@ -194,6 +187,5 @@ def recompile(model_class_name, graph_module, inputs):
     size = len(result)
     for i in range(size - 1):
         torch_nodes[result[i]].append(torch_nodes[result[i+1]])
-    # print(graph_module.graph, file=output_file)
     graph_module.graph.lint()
     graph_module.recompile()
