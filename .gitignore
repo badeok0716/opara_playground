@@ -1,9 +1,10 @@
+*.pkl
+*.json
+Opara/profile_result/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.pkl
-*.json
 # C extensions
 *.so
 

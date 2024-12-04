@@ -3,7 +3,6 @@ from torch.fx import symbolic_trace
 import torch.profiler
 from torch.fx import Interpreter
 import torch._dynamo.eval_frame
-import os
     
 
 def profile(symbolic_traced, inputs, path):
@@ -26,7 +25,6 @@ def profile(symbolic_traced, inputs, path):
     ) as p:
         for i in range(1):
             out_torch = interpreter.run(*inputs)
-            # out_torch = model(*inputs)
             p.step()
     return 
 

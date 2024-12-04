@@ -4,11 +4,6 @@ from Opara import ModelProfiler
 
 from collections import deque
 import os
-path = os.path.abspath(os.path.dirname(__file__))
-output_file_path = path + '/profile_result/output.txt'
-output_file = open(output_file_path, "w")
-
-
 def launch(nodes, result, in_degree, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock):
     def is_mem_access_intensive(node):
         memory_intensive_op = ['add', 'cast', 'ceil', 'clip', 'concat', 'exp', 'floor', 'log', 
@@ -93,7 +88,6 @@ def get_resource_from_json(path):
     for event in data["traceEvents"]:
         if "torch/fx/interpreter.py(107): run" in event["name"] and "run_node" not in event["name"]:
             step_num += 1
-    # print("step_num", step_num)
    
     # 获取run_node事件、kernel_launch事件、kernel事件
     run_node_events = []
@@ -131,8 +125,6 @@ def get_resource_from_json(path):
                 node2kernels[i].append(kernel_events[j])
                 kernel_num += 1
 
-    # print("kernel_num", kernel_num)
-
     max_block_nums = []
     sum_time = 0
     for i, kernel_events in enumerate(node2kernels):
@@ -168,7 +160,6 @@ def get_topo(fx_nodes, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock):
             in_degree[node.name] += 1
     visited = set()
     result = []
-    # print("fx_nodes", nodes.keys(), file=output_file)
     result = launch(nodes, result, in_degree, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock)
 
     return result, nodes
@@ -176,11 +167,11 @@ def get_topo(fx_nodes, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock):
 def recompile(model_class_name, graph_module, inputs):
     
     path = os.path.abspath(os.path.dirname(__file__))
-    # model_class_name = graph_module.__class__.__name__
     for i in inputs:
         model_class_name += "_" + str(i.shape)
     cur_slurm_node = os.environ['SLURM_NODELIST']
-    path += "/profile_result/" + model_class_name + "_" + cur_slurm_node + ".pt.trace.json"
+    os.makedirs(path + "/profile_result/2.5.1/", exist_ok=True)
+    path += "/profile_result/2.5.1/" + model_class_name + "_" + cur_slurm_node + ".pt.trace.json"
     if os.path.exists(path) is False:
         ModelProfiler.profile(graph_module, inputs, path)
     node2kernels, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock = get_resource_from_json(path)
@@ -194,6 +185,5 @@ def recompile(model_class_name, graph_module, inputs):
     size = len(result)
     for i in range(size - 1):
         torch_nodes[result[i]].append(torch_nodes[result[i+1]])
-    # print(graph_module.graph, file=output_file)
     graph_module.graph.lint()
     graph_module.recompile()
