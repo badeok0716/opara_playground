@@ -5,9 +5,6 @@ from Opara import OperatorLauncher
 from Opara import StreamAllocator
 from torch._functorch.partitioners import draw_graph
 import os
-path = os.path.abspath(os.path.dirname(__file__))
-output_file_path = path + '/profile_result/output.txt'
-output_file = open(output_file_path, "w")
 
 class Scheduler(Interpreter):
     def run_node(self, n):
