@@ -1,4 +1,4 @@
-conda create -n opara python=3.10 -y
-conda activate opara
+conda create -n stream python=3.10 -y
+conda activate stream
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu117
 pip install -e .

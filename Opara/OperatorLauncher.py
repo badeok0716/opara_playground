@@ -91,7 +91,7 @@ def get_resource_from_json(path):
 
     step_num = 0
     for event in data["traceEvents"]:
-        if "torch/fx/interpreter.py(97): run" in event["name"] and "run_node" not in event["name"]:
+        if "torch/fx/interpreter.py(107): run" in event["name"] and "run_node" not in event["name"]:
             step_num += 1
     # print("step_num", step_num)
    
@@ -179,7 +179,8 @@ def recompile(model_class_name, graph_module, inputs):
     # model_class_name = graph_module.__class__.__name__
     for i in inputs:
         model_class_name += "_" + str(i.shape)
-    path += "/profile_result/" + model_class_name + ".pt.trace.json"
+    cur_slurm_node = os.environ['SLURM_NODELIST']
+    path += "/profile_result/" + model_class_name + "_" + cur_slurm_node + ".pt.trace.json"
     if os.path.exists(path) is False:
         ModelProfiler.profile(graph_module, inputs, path)
     node2kernels, sharedMemPerBlock, regsPerBlock, maxThreadsPerBlock = get_resource_from_json(path)
