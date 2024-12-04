@@ -1,8 +1,5 @@
 from torch.cuda.streams import Stream, Event
 import os
-path = os.path.abspath(os.path.dirname(__file__))
-output_file_path = path + '/profile_result/output.txt'
-output_file = open(output_file_path, "w")
 
 def assign_stream(graph):
     for node in graph.nodes:
@@ -148,7 +145,6 @@ def get_mapping(matching):
                 break
             else:
                 curr = matching[curr]
-    # print("chains:", chains, file=output_file)
     return (mapping, chains, group_num)        
 
 def build_stream_dag(nn_dag, stream_chains):
