@@ -3,7 +3,7 @@
 # Define the options for model and method
 nbatchs=("1" "4" "16")
 models=("deepfm" "googlenet" "nasnet")
-methods=("torch" "sequence" "opara")
+methods=("torch" "torch_compile" "sequence" "opara")
 
 # Loop through each combination of model and method
 for nbatch in "${nbatchs[@]}"; do

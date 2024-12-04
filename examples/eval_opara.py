@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     # check exists
     pathkey = f'{node_name}_{args.batch_size}_{args.warm_ups}_{args.iterations}/'
-    path2dir = f'/home/deokjae/Opara/examples/results/' + pathkey
+    path2dir = f'/home/deokjae/Opara/examples/results_2.5.1/' + pathkey
     path2pkl = path2dir + f'{args.model}_{args.method}.pkl'
     os.makedirs(path2dir, exist_ok=True)
     if os.path.exists(path2pkl):
