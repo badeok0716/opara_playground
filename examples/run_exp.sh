@@ -5,6 +5,7 @@ nbatchs=("1" "4" "16")
 models=("deepfm" "googlenet" "nasnet")
 methods=("torch" "torch_compile" "sequence" "opara")
 
+conda activate stream
 # Loop through each combination of model and method
 for nbatch in "${nbatchs[@]}"; do
     for model in "${models[@]}"; do
